@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Calculadora Impuestos</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="/webjars/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/3.2.0/css/bootstrap.min.css"/>
+</head>
+
+<body>
+<div class="container">
+    <div class="jumbotron text-center">
+        <h1>Calculadora de Impuestos en Costa Rica</h1>
+    </div>
+    <form action="#" th:action="@{/}" th:object="${TaxesCalculator}"
+          method="post">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-3">
+                    <p th:text="'Salario Base:'"></p>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" style="direction: rtl;" min="0" step=".01" th:field="*{salary}"
+                           th:align="right"/>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit">Calcular</button>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <tr>
+                <th>Rubro</th>
+                <th>Monto</th>
+                <th>Porcentaje</th>
+            </tr>
+            <tr>
+                <td>CCSS:</td>
+                <td th:text="'¢ '+*{#numbers.formatDecimal(socialInsurance, 1, 'COMMA', 2, 'POINT')}" th:align="right"/>
+                <td th:text="*{socialInsurancePercentage}+'%'" th:align="right"/>
+            </tr>
+            <tr>
+                <td>Banco Popular:</td>
+                <td th:text="'¢ '+*{#numbers.formatDecimal(socialBank, 1, 'COMMA', 2, 'POINT')}" th:align="right"/>
+                <td th:text="*{socialBankPercentage}+'%'" th:align="right"/>
+            </tr>
+            <tr>
+                <td>
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" th:href="'#detail'" th:text="'Impuesto al Salario:'"/>
+                        </h4>
+                    </div>
+                    <div th:id="detail" class="panel-collapse collapse">
+                        <table>
+                            <tr>
+                                <td>De ¢0.00 a ¢817,000.00 = 0%</td>
+                                <td th:text="'¢ '+*{#numbers.formatDecimal(exemptSalaryTax, 1, 'COMMA', 2, 'POINT')}"
+                                    th:align="right"/>
+                            </tr>
+                            <tr>
+                                <td>De ¢817,000.00 a ¢1,226,000.00 = 10%</td>
+                                <td th:text="'¢ '+*{#numbers.formatDecimal(tenPercentSalaryTax, 1, 'COMMA', 2, 'POINT')}"
+                                    th:align="right"/>
+                            </tr>
+                            <tr>
+                                <td>De ¢1,226,000.00 en adelante = 15%</td>
+                                <td th:text="'¢ '+*{#numbers.formatDecimal(fifteenPercentSalaryTax, 1, 'COMMA', 2, 'POINT')}"
+                                    th:align="right"/>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td th:text="'¢ '+*{#numbers.formatDecimal(salaryTax, 1, 'COMMA', 2, 'POINT')}" th:align="right"/>
+                <td th:text="*{salaryTaxPercentage}+'%'" th:align="right"/>
+            </tr>
+            <tr>
+                <td>Impuesto Total:</td>
+                <td th:text="'¢ '+*{#numbers.formatDecimal(totalTax, 1, 'COMMA', 2, 'POINT')}" th:align="right"/>
+                <td th:text="*{totalTaxPercentage}+'%'" th:align="right"/>
+            </tr>
+            <tr>
+                <td>Salario Neto:</td>
+                <td th:text="'¢ '+*{#numbers.formatDecimal(netSalary, 1, 'COMMA', 2, 'POINT')}" th:align="right"/>
+                <td th:text="*{netSalaryPercentage}+'%'" th:align="right"/>
+            </tr>
+        </table>
+    </form>
+</div>
+
+</body>
+</html>
